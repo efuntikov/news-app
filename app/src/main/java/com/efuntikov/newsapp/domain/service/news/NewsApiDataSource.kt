@@ -1,6 +1,6 @@
-package com.efuntikov.newsapp.domain.news
+package com.efuntikov.newsapp.domain.service.news
 
-import com.efuntikov.newsapp.model.NewsItemModel
+import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.kwabenaberko.newsapilib.NewsApiClient
 import com.kwabenaberko.newsapilib.models.request.EverythingRequest
 import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest
@@ -20,10 +20,11 @@ class NewsApiDataSource {
                 articleResponse?.let { response ->
                     response.articles?.let { articles ->
                         newsCallback.onSuccess(result = articles.map { article ->
-                            NewsItemModel(
+                            NewsItemEntity(
                                 title = article.title,
                                 textContent = article.description,
-                                author = article.author
+                                author = article.author,
+                                imageUrl = article.urlToImage
                             )
                         })
                     }
@@ -47,10 +48,11 @@ class NewsApiDataSource {
                 articleResponse?.let { response ->
                     response.articles?.let { articles ->
                         newsCallback.onSuccess(result = articles.map { article ->
-                            NewsItemModel(
+                            NewsItemEntity(
                                 title = article.title,
                                 textContent = article.description,
-                                author = article.author
+                                author = article.author,
+                                imageUrl = article.urlToImage
                             )
                         })
                     }

@@ -4,6 +4,7 @@ import android.content.ContextWrapper
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.efuntikov.newsapp.component.BaseViewModel
 
@@ -13,7 +14,7 @@ inline fun <reified VM : BaseViewModel> getViewModel(key: String? = null): VM =
 //        ((LocalContext.current as ContextWrapper).baseContext as ComponentActivity).let {
 //            viewModel<VM>(viewModelStoreOwner = it, key = key)
 //        }
-        viewModel<VM>(key = key)
+        hiltViewModel<VM>(key = key)
     } else {
-        viewModel()
+        hiltViewModel()
     }
