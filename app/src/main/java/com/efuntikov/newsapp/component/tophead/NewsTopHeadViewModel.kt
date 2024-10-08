@@ -10,22 +10,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsTopHeadViewModel @Inject constructor() : BaseViewModel() {
+    val categoriesList = mutableStateOf<Set<TopNewsCategory>>(emptySet())
+    val selectedCategory = mutableStateOf(TopNewsCategory.BUSINESS)
 //    val newsList = mutableStateOf<List<NewsItemEntity>>(emptyList())
 //
-//    fun load() {
-//        if (observeEverythingJob != null) {
-//            return
-//        }
-//
-//        viewModelScope.launch(Dispatchers.Default) {
-//            newsService.observeEverything().cancellable().collect { everythingNewsList ->
-//                if (everythingNewsList.isEmpty()) {
-//                    fetchNews()
-//                }
-//                newsList.value = everythingNewsList
-//            }
-//        }
-//    }
+    fun load() {
+        categoriesList.value = TopNewsCategory.entries.toSet()
+    }
+
+    fun selectCategory(category: TopNewsCategory) {
+        selectedCategory.value = category
+    }
 
 //    fun stopObserving() {
 //        observeEverythingJob?.cancel()

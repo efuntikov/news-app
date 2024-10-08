@@ -19,18 +19,23 @@ class NewsListViewModel @Inject constructor(
     private var observeEverythingJob: Job? = null
 
     val newsList = mutableStateOf<List<NewsItemEntity>>(emptyList())
+    val newsFeedRefreshing = mutableStateOf(false)
 
     fun load() {
         if (observeEverythingJob != null) {
             return
         }
 
+        newsFeedRefreshing.value = true
+
         viewModelScope.launch(Dispatchers.Default) {
             newsService.observeEverything().cancellable().collect { everythingNewsList ->
+                newsList.value = everythingNewsList
                 if (everythingNewsList.isEmpty()) {
                     fetchNews()
+                } else {
+                    newsFeedRefreshing.value = false
                 }
-                newsList.value = everythingNewsList
             }
         }
     }

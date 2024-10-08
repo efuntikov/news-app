@@ -14,7 +14,7 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE id = :newsItemId")
     fun observeNewsItemById(newsItemId: String): Flow<NewsItemEntity>
 
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news WHERE category = null")
     fun observeNews(): NewsFeed
 
     @Query("SELECT * FROM news WHERE category = :category")
