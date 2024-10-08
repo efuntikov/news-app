@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.component.newslist
+package com.efuntikov.newsapp.component.feed
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

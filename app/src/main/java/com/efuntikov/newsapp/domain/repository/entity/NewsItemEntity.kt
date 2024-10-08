@@ -15,7 +15,9 @@ data class NewsItemEntity(
     @ColumnInfo(name = "author")
     val author: String?,
     @ColumnInfo(name = "image_url")
-    val imageUrl: String?
+    val imageUrl: String?,
+    @ColumnInfo(name = "category")
+    val category: String?
 ) {
     fun getKey() = id
     fun getType() = "news"

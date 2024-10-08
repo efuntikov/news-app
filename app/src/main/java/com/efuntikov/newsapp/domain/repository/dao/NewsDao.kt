@@ -7,13 +7,18 @@ import androidx.room.Query
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import kotlinx.coroutines.flow.Flow
 
+typealias NewsFeed = Flow<List<NewsItemEntity>>
+
 @Dao
 interface NewsDao {
     @Query("SELECT * FROM news WHERE id = :newsItemId")
     fun observeNewsItemById(newsItemId: String): Flow<NewsItemEntity>
 
     @Query("SELECT * FROM news")
-    fun observeNews(): Flow<List<NewsItemEntity>>
+    fun observeNews(): NewsFeed
+
+    @Query("SELECT * FROM news WHERE category = :category")
+    fun observeNewsByCategory(category: String): NewsFeed
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(newsItem: NewsItemEntity)

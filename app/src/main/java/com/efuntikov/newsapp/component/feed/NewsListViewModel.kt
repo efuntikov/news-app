@@ -1,10 +1,9 @@
-package com.efuntikov.newsapp.component.newslist
+package com.efuntikov.newsapp.component.feed
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.efuntikov.newsapp.component.BaseViewModel
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
-import com.efuntikov.newsapp.domain.service.news.NewsCallback
 import com.efuntikov.newsapp.domain.service.news.NewsService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

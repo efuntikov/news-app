@@ -1,16 +1,15 @@
 package com.efuntikov.newsapp.domain.service.news
 
+import com.efuntikov.newsapp.domain.repository.dao.NewsFeed
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
-import kotlinx.coroutines.flow.Flow
 
 interface NewsCallback {
     fun onSuccess(result: List<NewsItemEntity>)
+    fun onFailure(throwable: Throwable?)
 }
 
 interface NewsService {
-    fun getTopNews(newsCallback: NewsCallback)
 
-    fun observeEverything(): Flow<List<NewsItemEntity>>
-
+    fun observeEverything(): NewsFeed
     suspend fun fetchEverything()
 }

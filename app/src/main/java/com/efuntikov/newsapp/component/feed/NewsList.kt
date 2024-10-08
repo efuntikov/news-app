@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.component.newslist
+package com.efuntikov.newsapp.component.feed
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

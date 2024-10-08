@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.component.newslist
+package com.efuntikov.newsapp.component.feed
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -59,7 +59,8 @@ fun NewsListItemPreview() {
             title = "title",
             textContent = "content",
             author = "author",
-            imageUrl = "https://i.insider.com/66e231c1cfb7f307e570bc7c?width=1200&format=jpeg"
+            imageUrl = "https://i.insider.com/66e231c1cfb7f307e570bc7c?width=1200&format=jpeg",
+            category = null
         )
     )
 }

@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.component.newslist
+package com.efuntikov.newsapp.component.feed
 
 import com.efuntikov.newsapp.component.BaseViewModel
 import com.efuntikov.newsapp.domain.service.news.NewsService
