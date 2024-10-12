@@ -11,5 +11,8 @@ interface NewsDataSource {
         language: Language = Language.EN
     )
 
-    fun getEverything(newsCallback: NewsCallback)
+    fun getEverything(
+        newsCallback: NewsCallback, pageSize: Int,
+        language: Language = Language.EN
+    )
 }

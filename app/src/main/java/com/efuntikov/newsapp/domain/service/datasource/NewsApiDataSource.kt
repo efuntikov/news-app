@@ -7,6 +7,7 @@ import com.kwabenaberko.newsapilib.NewsApiClient
 import com.kwabenaberko.newsapilib.models.request.EverythingRequest
 import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest
 import com.kwabenaberko.newsapilib.models.response.ArticleResponse
+import timber.log.Timber
 import javax.inject.Inject
 
 enum class Language {
@@ -23,7 +24,7 @@ private class TopHeadlinesCallback(
                 newsCallback.onSuccess(result = articles.map { article ->
                     NewsItemEntity(
                         title = article.title,
-                        textContent = article.description,
+                        textContent = article.description ?: "",
                         author = article.author,
                         imageUrl = article.urlToImage,
                         category = category.name.lowercase()
@@ -54,11 +55,14 @@ class NewsApiDataSource @Inject constructor() : NewsDataSource {
             .build(), TopHeadlinesCallback(newsCallback, category)
     )
 
-    override fun getEverything(newsCallback: NewsCallback) = newsApiClient.getEverything(
+    override fun getEverything(
+        newsCallback: NewsCallback, pageSize: Int,
+        language: Language
+    ) = newsApiClient.getEverything(
         EverythingRequest.Builder()
-            .q("tesla")
-            .language("en")
-            .pageSize(20)
+            .language(language.name.lowercase())
+            .pageSize(pageSize)
+            .q("bitcoin")
             .build(),
         object : NewsApiClient.ArticlesResponseCallback {
             override fun onSuccess(articleResponse: ArticleResponse?) {
@@ -78,7 +82,7 @@ class NewsApiDataSource @Inject constructor() : NewsDataSource {
             }
 
             override fun onFailure(throwable: Throwable?) {
-                TODO("Not yet implemented")
+                Timber.e(throwable, "Failed to fetch non-categorized news")
             }
 
         })

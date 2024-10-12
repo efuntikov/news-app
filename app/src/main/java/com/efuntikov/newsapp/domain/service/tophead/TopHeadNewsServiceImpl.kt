@@ -22,23 +22,44 @@ class TopHeadNewsServiceImpl @Inject constructor(
     override fun observeTopNewsByCategory(category: TopNewsCategory) =
         database.newsDao().observeNewsByCategory(category = category.name.lowercase())
 
-    override fun getTopNews(newsCallback: NewsCallback) =
-        TopNewsCategory.entries.forEach { category ->
-            newsApiDataSource.getTopHeadlines(
-                newsCallback = object : NewsCallback {
-                    override fun onSuccess(result: List<NewsItemEntity>) {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            database.newsDao().insertAll(result)
-                        }
-                    }
+    override fun observeNewsItem(newsItemId: Long) =
+        database.newsDao().observeNewsItemById(newsItemId = newsItemId)
 
-                    override fun onFailure(throwable: Throwable?) {
-                        TODO("Not yet implemented")
-                    }
-                },
-                category = category,
-                pageSize = 20,
-                language = Language.EN
-            )
+    override fun fetchTopNews() =
+        TopNewsCategory.entries.forEach { category ->
+//            newsApiDataSource.getTopHeadlines(
+//                newsCallback = object : NewsCallback {
+//                    override fun onSuccess(result: List<NewsItemEntity>) {
+//                        coroutineScope.launch(Dispatchers.IO) {
+//                            database.newsDao().insertAll(result)
+//                        }
+//                    }
+//
+//                    override fun onFailure(throwable: Throwable?) {
+//                        TODO("Not yet implemented")
+//                    }
+//                },
+//                category = category,
+//                pageSize = 20,
+//                language = Language.EN
+//            )
         }
+
+    override fun fetchTopNews(category: TopNewsCategory) =
+        newsApiDataSource.getTopHeadlines(
+            newsCallback = object : NewsCallback {
+                override fun onSuccess(result: List<NewsItemEntity>) {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        database.newsDao().insertAll(result)
+                    }
+                }
+
+                override fun onFailure(throwable: Throwable?) {
+                    TODO("Not yet implemented")
+                }
+            },
+            category = category,
+            pageSize = 20,
+            language = Language.EN
+        )
 }

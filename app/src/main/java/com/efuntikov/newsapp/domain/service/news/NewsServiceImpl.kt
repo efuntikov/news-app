@@ -2,6 +2,7 @@ package com.efuntikov.newsapp.domain.service.news
 
 import com.efuntikov.newsapp.domain.repository.NewsDatabase
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
+import com.efuntikov.newsapp.domain.service.datasource.Language
 import com.efuntikov.newsapp.domain.service.datasource.NewsApiDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,17 +18,23 @@ class NewsServiceImpl @Inject constructor(
 
     override fun observeEverything() = database.newsDao().observeNews()
 
-    override suspend fun fetchEverything() {
-        newsApiDataSource.getEverything(object : NewsCallback {
-            override fun onSuccess(result: List<NewsItemEntity>) {
-                coroutineScope.launch(Dispatchers.IO) {
-                    database.newsDao().insertAll(result)
-                }
-            }
+    override fun observeNewsItemById(newsItemId: Long) =
+        database.newsDao().observeNewsItemById(newsItemId = newsItemId)
 
-            override fun onFailure(throwable: Throwable?) {
-                TODO("Not yet implemented")
-            }
-        })
+    override suspend fun fetchEverything() {
+        newsApiDataSource.getEverything(
+            newsCallback = object : NewsCallback {
+                override fun onSuccess(result: List<NewsItemEntity>) {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        database.newsDao().insertAll(result)
+                    }
+                }
+
+                override fun onFailure(throwable: Throwable?) {
+                    TODO("Not yet implemented")
+                }
+            }, pageSize = 20,
+            language = Language.EN
+        )
     }
 }

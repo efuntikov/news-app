@@ -21,4 +21,29 @@ data class NewsItemEntity(
 ) {
     fun getKey() = id
     fun getType() = "news"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NewsItemEntity
+
+        if (title != other.title) return false
+        if (textContent != other.textContent) return false
+        if (author != other.author) return false
+        if (imageUrl != other.imageUrl) return false
+        if (category != other.category) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + textContent.hashCode()
+        result = 31 * result + (author?.hashCode() ?: 0)
+        result = 31 * result + (imageUrl?.hashCode() ?: 0)
+        result = 31 * result + (category?.hashCode() ?: 0)
+        return result
+    }
+
 }

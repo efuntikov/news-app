@@ -3,6 +3,7 @@ package com.efuntikov.newsapp.component.tophead
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +33,11 @@ import com.efuntikov.newsapp.getViewModel
 
 @Composable
 fun NewsTopHeadSection() {
-    Column(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         CategoriesRow()
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalFeed()
@@ -44,7 +51,13 @@ fun CategoriesRow() {
     LaunchedEffect(key1 = "initial") {
         viewModel.load()
     }
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    val scrollState = rememberScrollState()
+    Row(
+        modifier = Modifier
+            .horizontalScroll(scrollState)
+            .background(Color.Red),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         categories.forEach { category ->
             Category(category = category)
         }
@@ -66,7 +79,7 @@ fun Category(category: TopNewsCategory) {
     val viewModel = getViewModel<NewsTopHeadViewModel>()
     val selectedCategory by viewModel.selectedCategory
     Row(
-        modifier = Modifier
+        modifier = Modifier.wrapContentHeight()
             .clickable { viewModel.selectCategory(category) },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -85,8 +98,21 @@ fun Category(category: TopNewsCategory) {
 
 @Composable
 fun HorizontalFeed() {
-    LazyRow(modifier = Modifier.fillMaxWidth()) {
-
+    val viewModel = getViewModel<NewsTopHeadViewModel>()
+    val newsFeedByCategory by viewModel.newsListByCategory
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Magenta)
+    ) {
+        itemsIndexed(
+            items = newsFeedByCategory,
+            key = { _, item -> item.getKey() },
+            contentType = { _, item -> item.getType() },
+            itemContent = { _, newsItem ->
+                TopHeadNewsFeedItem(newsItemId = newsItem.id)
+            }
+        )
     }
 }
 

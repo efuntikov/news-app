@@ -12,9 +12,9 @@ typealias NewsFeed = Flow<List<NewsItemEntity>>
 @Dao
 interface NewsDao {
     @Query("SELECT * FROM news WHERE id = :newsItemId")
-    fun observeNewsItemById(newsItemId: String): Flow<NewsItemEntity>
+    fun observeNewsItemById(newsItemId: Long): Flow<NewsItemEntity>
 
-    @Query("SELECT * FROM news WHERE category = null")
+    @Query("SELECT * FROM news WHERE category IS NULL")
     fun observeNews(): NewsFeed
 
     @Query("SELECT * FROM news WHERE category = :category")
