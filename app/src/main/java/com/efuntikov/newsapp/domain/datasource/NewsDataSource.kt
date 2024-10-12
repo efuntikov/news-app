@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.domain.service.datasource
+package com.efuntikov.newsapp.domain.datasource
 
 import com.efuntikov.newsapp.component.tophead.TopNewsCategory
 import com.efuntikov.newsapp.domain.service.news.NewsCallback

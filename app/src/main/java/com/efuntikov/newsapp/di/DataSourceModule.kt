@@ -1,7 +1,7 @@
 package com.efuntikov.newsapp.di
 
-import com.efuntikov.newsapp.domain.service.datasource.NewsApiDataSource
-import com.efuntikov.newsapp.domain.service.datasource.NewsDataSource
+import com.efuntikov.newsapp.domain.datasource.NewsApiDataSource
+import com.efuntikov.newsapp.domain.datasource.NewsDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

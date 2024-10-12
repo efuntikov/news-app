@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.domain.service.datasource
+package com.efuntikov.newsapp.domain.datasource
 
 import com.efuntikov.newsapp.component.tophead.TopNewsCategory
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
@@ -11,7 +11,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 enum class Language {
-    EN
+    AR, DE, EN, ES, FR, HE, IT, NL, NO, PT, RU, SV, UD, ZH
 }
 
 private class TopHeadlinesCallback(

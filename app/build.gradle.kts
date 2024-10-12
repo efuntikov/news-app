@@ -89,4 +89,7 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
+
+    // Security
+    implementation(libs.androidx.security.crypto.ktx)
 }
