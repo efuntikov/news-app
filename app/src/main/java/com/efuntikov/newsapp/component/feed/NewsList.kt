@@ -2,6 +2,7 @@ package com.efuntikov.newsapp.component.feed
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.efuntikov.newsapp.component.tophead.NewsTopHeadSection
@@ -45,12 +48,13 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
         newsListViewModel.load()
     }
 
-    Column(Modifier.pullRefresh(state)) {
+    Column(Modifier.pullRefresh(state).background(color = MaterialTheme.colorScheme.background)) {
         NewsTopHeadSection()
         LazyColumn(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight().background(Color.Yellow)) {
+                .fillMaxHeight().background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
             itemsIndexed(
                 items = newsList,
                 key = { _, item -> item.getKey() },

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +38,7 @@ fun NewsTopHeadSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .wrapContentHeight().background(color = MaterialTheme.colorScheme.background)
     ) {
         CategoriesRow()
         Spacer(modifier = Modifier.height(8.dp))
@@ -55,7 +57,7 @@ fun CategoriesRow() {
     Row(
         modifier = Modifier
             .horizontalScroll(scrollState)
-            .background(Color.Red),
+            .background(color = MaterialTheme.colorScheme.background),
         verticalAlignment = Alignment.CenterVertically
     ) {
         categories.forEach { category ->
@@ -79,7 +81,8 @@ fun Category(category: TopNewsCategory) {
     val viewModel = getViewModel<NewsTopHeadViewModel>()
     val selectedCategory by viewModel.selectedCategory
     Row(
-        modifier = Modifier.wrapContentHeight()
+        modifier = Modifier
+            .wrapContentHeight()
             .clickable { viewModel.selectCategory(category) },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -103,7 +106,8 @@ fun HorizontalFeed() {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Magenta)
+            .background(MaterialTheme.colorScheme.background),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         itemsIndexed(
             items = newsFeedByCategory,
