@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.efuntikov.newsapp.component.topbar.TopBar
 import com.efuntikov.newsapp.component.tophead.NewsTopHeadSection
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
@@ -48,35 +49,42 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
     }
 
     Column(
-        Modifier
-            .pullRefresh(state)
-            .background(color = MaterialTheme.colorScheme.background)) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.background),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        TopBar()
+        Column(
+            Modifier
+                .pullRefresh(state)
         ) {
-            item {
-                NewsTopHeadSection()
-            }
-            itemsIndexed(
-                items = newsList,
-                key = { _, item -> item.getKey() },
-                contentType = { _, item -> item.getType() },
-                itemContent = { _, newsItem ->
-                    NewsListItem(modifier = Modifier.clickable {
-                        navController.navigate("details/${newsItem.id}")
-                    }, newsItem.getKey())
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.background),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    NewsTopHeadSection()
                 }
+                itemsIndexed(
+                    items = newsList,
+                    key = { _, item -> item.getKey() },
+                    contentType = { _, item -> item.getType() },
+                    itemContent = { _, newsItem ->
+                        NewsListItem(modifier = Modifier.clickable {
+                            navController.navigate("details/${newsItem.id}")
+                        }, newsItem.getKey())
+                    }
+                )
+            }
+
+            PullRefreshIndicator(
+                refreshing,
+                state, /*Modifier.align(alignment = androidx.compose.ui.Alignment.Horizontal)*/
             )
         }
-
-        PullRefreshIndicator(
-            refreshing,
-            state, /*Modifier.align(alignment = androidx.compose.ui.Alignment.Horizontal)*/
-        )
     }
 }
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.efuntikov.newsapp.getViewModel
+import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun NewsTopHeadSection() {
@@ -127,11 +128,15 @@ fun HorizontalFeed() {
 @Preview
 @Composable
 fun NewsTopHeadSectionPreview() {
-    NewsTopHeadSection()
+    NewsAppTheme {
+        NewsTopHeadSection()
+    }
 }
 
 @Preview
 @Composable
 fun CategoryPreview() {
-    Category(category = TopNewsCategory.ENTERTAINMENT)
+    NewsAppTheme {
+        Category(category = TopNewsCategory.ENTERTAINMENT)
+    }
 }

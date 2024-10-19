@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.efuntikov.newsapp.component.tophead.newsTopHeadItemShape
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.efuntikov.newsapp.getViewModel
+import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun NewsListItem(modifier: Modifier, newsItemId: Long) {
@@ -82,14 +83,16 @@ private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntit
 @Preview
 @Composable
 fun NewsListItemContentPreview() {
-    NewsListItemContent(
-        Modifier,
-        newsItemModel = NewsItemEntity(
-            title = "News title",
-            imageUrl = null,
-            author = "Author",
-            textContent = "News content",
-            category = null
+    NewsAppTheme {
+        NewsListItemContent(
+            Modifier,
+            newsItemModel = NewsItemEntity(
+                title = "News title",
+                imageUrl = null,
+                author = "Author",
+                textContent = "News content",
+                category = null
+            )
         )
-    )
+    }
 }

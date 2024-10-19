@@ -16,6 +16,9 @@ private val InkputAntiqua = FontFamily(
 
 val Typography = Typography().let {
     it.copy(
+        headlineLarge = it.headlineLarge.copy(fontFamily = InkputAntiqua),
+        headlineMedium = it.headlineMedium.copy(fontFamily = InkputAntiqua),
+        headlineSmall = it.headlineSmall.copy(fontFamily = InkputAntiqua),
         bodyLarge = it.bodyLarge.copy(fontFamily = InkputAntiqua),
         bodyMedium = it.bodyMedium.copy(fontFamily = InkputAntiqua),
         bodySmall = it.bodySmall.copy(fontFamily = InkputAntiqua),
