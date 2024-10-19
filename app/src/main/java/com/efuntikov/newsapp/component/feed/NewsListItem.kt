@@ -7,24 +7,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.efuntikov.newsapp.R
+import com.efuntikov.newsapp.component.tophead.newsTopHeadItemShape
+import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.efuntikov.newsapp.getViewModel
-import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun NewsListItem(modifier: Modifier, newsItemId: Long) {
@@ -32,41 +32,64 @@ fun NewsListItem(modifier: Modifier, newsItemId: Long) {
     viewModel.setNewsItemId(newsItemId)
     val newsItemModel by viewModel.newsItemModel
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(color = Color.DarkGray)
-    ) {
-        newsItemModel?.let { newsItem ->
-            Column {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .sizeIn(maxHeight = 120.dp),
-                    model = newsItem.imageUrl,
-                    contentDescription = "news image"
+    NewsListItemContent(modifier, newsItemModel)
+}
+
+@Composable
+private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntity?) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()) {
+        Spacer(Modifier.width(12.dp))
+        Box(
+            modifier = modifier
+                .weight(1f)
+                .wrapContentHeight()
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = newsTopHeadItemShape
                 )
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
-                        .fillMaxWidth()
-                )
-                Text(color = Color.Cyan, text = newsItem.title)
-//            Spacer(modifier = Modifier
-//                .height(8.dp)
-//                .fillMaxWidth())
-//            Text(color = Color.Magenta, text = newsItem.textContent)
+                .clip(newsTopHeadItemShape)
+        ) {
+            newsItemModel?.let { newsItem ->
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    AsyncImage(
+                        modifier = Modifier.size(120.dp),
+                        contentScale = ContentScale.Crop,
+                        model = newsItem.imageUrl,
+                        contentDescription = "news image"
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .width(12.dp)
+                    )
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            color = Color.Cyan,
+                            text = newsItem.title,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
             }
         }
+        Spacer(Modifier.width(12.dp))
     }
 }
 
 @Preview
 @Composable
-fun NewsListItemPreview() {
-    NewsListItem(
-        modifier = Modifier,
-        newsItemId = 123
+fun NewsListItemContentPreview() {
+    NewsListItemContent(
+        Modifier,
+        newsItemModel = NewsItemEntity(
+            title = "News title",
+            imageUrl = null,
+            author = "Author",
+            textContent = "News content",
+            category = null
+        )
     )
 }

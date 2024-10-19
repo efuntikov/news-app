@@ -35,14 +35,18 @@ import com.efuntikov.newsapp.getViewModel
 
 @Composable
 fun NewsTopHeadSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight().background(color = MaterialTheme.colorScheme.background)
-    ) {
-        CategoriesRow()
-        Spacer(modifier = Modifier.height(8.dp))
-        HorizontalFeed()
+    Row(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(color = MaterialTheme.colorScheme.background)
+        ) {
+            CategoriesRow()
+            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalFeed()
+        }
     }
 }
 
@@ -124,4 +128,10 @@ fun HorizontalFeed() {
 @Composable
 fun NewsTopHeadSectionPreview() {
     NewsTopHeadSection()
+}
+
+@Preview
+@Composable
+fun CategoryPreview() {
+    Category(category = TopNewsCategory.ENTERTAINMENT)
 }

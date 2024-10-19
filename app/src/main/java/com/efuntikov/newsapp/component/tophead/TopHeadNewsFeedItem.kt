@@ -1,5 +1,6 @@
 package com.efuntikov.newsapp.component.tophead
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,11 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.efuntikov.newsapp.R
 import com.efuntikov.newsapp.component.feed.NewsListItemViewModel
@@ -32,7 +35,7 @@ import com.efuntikov.newsapp.getViewModel
 val newsTopHeadItemShape = RoundedCornerShape(
     topStart = CornerSize(16.dp),
     topEnd = CornerSize(16.dp),
-    bottomStart = CornerSize(16.dp), bottomEnd = CornerSize(3.dp)
+    bottomStart = CornerSize(16.dp), bottomEnd = CornerSize(16.dp)
 )
 
 @Composable
@@ -62,7 +65,6 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSection(newsItemId: Long) {
     val viewModel: NewsListItemViewModel = getViewModel(key = newsItemId.toString())
@@ -71,31 +73,41 @@ private fun BottomSection(newsItemId: Long) {
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(12.dp)
             .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.error) //!!!
     ) {
         newsItemModel?.let { newsItem ->
             Text(
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh), //!!!
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
+                overflow = TextOverflow.Ellipsis,
                 text = newsItem.title
             )
 
             newsItem.author?.let { author ->
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .background(Color.Green),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
+                    Image(
                         painter = painterResource(R.drawable.ic_avatar),
-                        tint = null,
+                        modifier = Modifier.size(36.dp),
                         contentDescription = "top head news item author icon"
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        modifier = Modifier.background(Color.Red),
+                        modifier = Modifier
+                            .background(Color.Red)
+                            .align(Alignment.CenterVertically),
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
+                        lineHeight = 10.sp,
                         text = author
                     )
                 }

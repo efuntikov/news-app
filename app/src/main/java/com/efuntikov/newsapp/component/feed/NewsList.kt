@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,13 +47,20 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
         newsListViewModel.load()
     }
 
-    Column(Modifier.pullRefresh(state).background(color = MaterialTheme.colorScheme.background)) {
-        NewsTopHeadSection()
+    Column(
+        Modifier
+            .pullRefresh(state)
+            .background(color = MaterialTheme.colorScheme.background)) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight().background(MaterialTheme.colorScheme.background),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                NewsTopHeadSection()
+            }
             itemsIndexed(
                 items = newsList,
                 key = { _, item -> item.getKey() },

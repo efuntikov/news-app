@@ -35,6 +35,7 @@ class NewsListViewModel @Inject constructor(
     }
 
     suspend fun fetchNews() {
+        newsFeedRefreshing.value = true
         newsService.fetchEverything()
     }
 }

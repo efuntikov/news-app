@@ -4,6 +4,7 @@ import com.efuntikov.newsapp.component.tophead.TopNewsCategory
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.efuntikov.newsapp.domain.service.news.NewsCallback
 import com.kwabenaberko.newsapilib.NewsApiClient
+import com.kwabenaberko.newsapilib.models.Article
 import com.kwabenaberko.newsapilib.models.request.EverythingRequest
 import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest
 import com.kwabenaberko.newsapilib.models.response.ArticleResponse
@@ -21,15 +22,17 @@ private class TopHeadlinesCallback(
     override fun onSuccess(articleResponse: ArticleResponse?) {
         articleResponse?.let { response ->
             response.articles?.let { articles ->
-                newsCallback.onSuccess(result = articles.map { article ->
-                    NewsItemEntity(
-                        title = article.title,
-                        textContent = article.description ?: "",
-                        author = article.author,
-                        imageUrl = article.urlToImage,
-                        category = category.name.lowercase()
-                    )
-                })
+                newsCallback.onSuccess(result = articles
+                    .filterRemoved()
+                    .map { article ->
+                        NewsItemEntity(
+                            title = article.title,
+                            textContent = article.description ?: "",
+                            author = article.author,
+                            imageUrl = article.urlToImage,
+                            category = category.name.lowercase()
+                        )
+                    })
             }
         }
     }
@@ -37,6 +40,12 @@ private class TopHeadlinesCallback(
     override fun onFailure(throwable: Throwable?) {
         newsCallback.onFailure(throwable)
     }
+}
+
+private fun MutableList<Article>.filterRemoved() = filter { article ->
+    !article.title.contains(
+        "[Removed]"
+    )
 }
 
 class NewsApiDataSource @Inject constructor() : NewsDataSource {
@@ -68,7 +77,7 @@ class NewsApiDataSource @Inject constructor() : NewsDataSource {
             override fun onSuccess(articleResponse: ArticleResponse?) {
                 articleResponse?.let { response ->
                     response.articles?.let { articles ->
-                        newsCallback.onSuccess(result = articles.map { article ->
+                        newsCallback.onSuccess(result = articles.filterRemoved().map { article ->
                             NewsItemEntity(
                                 title = article.title,
                                 textContent = article.description,
