@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.efuntikov.newsapp.component.BaseViewModel
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
-import com.efuntikov.newsapp.domain.service.tophead.TopHeadNewsService
+import com.efuntikov.newsapp.usecase.NewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsTopHeadViewModel @Inject constructor(
-    private val topHeadNewsService: TopHeadNewsService
+    private val newsUseCase: NewsUseCase
 ) : BaseViewModel() {
     val categoriesList = mutableStateOf<Set<TopNewsCategory>>(emptySet())
     val selectedCategory = mutableStateOf(TopNewsCategory.BUSINESS)
@@ -33,11 +33,11 @@ class NewsTopHeadViewModel @Inject constructor(
     }
 
     private fun observeNewsBySelectedCategory() = viewModelScope.launch(Dispatchers.Default) {
-        topHeadNewsService.observeTopNewsByCategory(selectedCategory.value).cancellable()
+        newsUseCase.observeTopNewsByCategory(selectedCategory.value).cancellable()
             .collect { categoryNewsList ->
                 newsListByCategory.value = categoryNewsList
                 if (categoryNewsList.isEmpty()) {
-                    topHeadNewsService.fetchTopNews(selectedCategory.value)
+                    newsUseCase.fetchTopNews(selectedCategory.value)
                 } else {
 //                    newsFeedRefreshing.value = false
                 }

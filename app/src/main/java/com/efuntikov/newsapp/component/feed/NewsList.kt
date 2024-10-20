@@ -22,7 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.efuntikov.newsapp.R
 import com.efuntikov.newsapp.component.topbar.TopBar
+import com.efuntikov.newsapp.component.topbar.TopBarState
 import com.efuntikov.newsapp.component.tophead.NewsTopHeadSection
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
@@ -53,7 +55,12 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
             .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.background)
     ) {
-        TopBar()
+        TopBar(
+            topBarState = TopBarState(
+                title = "News",
+                leadingIcon = R.drawable.ic_settings,
+                leadingIconClick = { navController.navigate("settings") })
+        )
         Column(
             Modifier
                 .pullRefresh(state)

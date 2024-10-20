@@ -15,7 +15,11 @@ import kotlinx.coroutines.withContext
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao
 
-    suspend fun clear() = withContext(Dispatchers.IO) {
+    suspend fun clearNews() = withContext(Dispatchers.IO) {
         newsDao().deleteAll()
+    }
+
+    suspend fun clear() {
+        clearNews()
     }
 }

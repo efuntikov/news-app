@@ -4,7 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.efuntikov.newsapp.component.BaseViewModel
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
-import com.efuntikov.newsapp.domain.service.news.NewsService
+import com.efuntikov.newsapp.domain.service.settings.SettingsService
+import com.efuntikov.newsapp.usecase.NewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.cancellable
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
-    private val newsService: NewsService
+    private val newsUseCase: NewsUseCase,
+    private val settingsService: SettingsService
 ) : BaseViewModel() {
 
     val newsList = mutableStateOf<List<NewsItemEntity>>(emptyList())
@@ -23,19 +25,23 @@ class NewsListViewModel @Inject constructor(
         newsFeedRefreshing.value = true
 
         viewModelScope.launch(Dispatchers.Default) {
-            newsService.observeEverything().cancellable().collect { everythingNewsList ->
+            newsUseCase.observeEverything().cancellable().collect { everythingNewsList ->
                 newsList.value = everythingNewsList
                 if (everythingNewsList.isEmpty()) {
-                    newsService.fetchEverything()
+                    newsUseCase.fetchEverything()
                 } else {
                     newsFeedRefreshing.value = false
                 }
+            }
+
+            settingsService.observeLanguage().cancellable().collect {
+                fetchNews()
             }
         }
     }
 
     suspend fun fetchNews() {
         newsFeedRefreshing.value = true
-        newsService.fetchEverything()
+        newsUseCase.fetchEverything()
     }
 }

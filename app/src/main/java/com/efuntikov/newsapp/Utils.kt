@@ -1,11 +1,9 @@
 package com.efuntikov.newsapp
 
 import android.content.ContextWrapper
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.efuntikov.newsapp.component.BaseViewModel
 
 @Composable

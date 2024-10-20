@@ -11,8 +11,39 @@ import com.kwabenaberko.newsapilib.models.response.ArticleResponse
 import timber.log.Timber
 import javax.inject.Inject
 
-enum class Language {
-    AR, DE, EN, ES, FR, HE, IT, NL, NO, PT, RU, SV, UD, ZH
+enum class Language(val description: String) {
+    AR("Arabic"),
+    DE("German"),
+    EN("English"),
+    ES("Spanish"),
+    FR("French"),
+    HE("Hebrew"),
+    IT("Italian"),
+    NL("Dutch"),
+    NO("Norwegian"),
+    PT("Portuguese"),
+    RU("Russian"),
+    SV("Swedish"),
+    UD("Ukrainian"),
+    ZH("Chinese");
+}
+
+fun String.mapFromLocale() = when (this) {
+    "ar" -> Language.AR
+    "de" -> Language.DE
+    "en" -> Language.EN
+    "es" -> Language.ES
+    "fr" -> Language.FR
+    "he" -> Language.HE
+    "it" -> Language.IT
+    "nl" -> Language.NL
+    "no" -> Language.NO
+    "pt" -> Language.PT
+    "ru" -> Language.RU
+    "sv" -> Language.SV
+    "uk" -> Language.UD
+    "zh" -> Language.ZH
+    else -> Language.EN
 }
 
 private class TopHeadlinesCallback(

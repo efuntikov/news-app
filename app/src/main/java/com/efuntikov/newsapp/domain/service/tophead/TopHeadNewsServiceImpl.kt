@@ -45,7 +45,7 @@ class TopHeadNewsServiceImpl @Inject constructor(
 //            )
         }
 
-    override fun fetchTopNews(category: TopNewsCategory) =
+    override fun fetchTopNews(category: TopNewsCategory, language: Language) =
         newsApiDataSource.getTopHeadlines(
             newsCallback = object : NewsCallback {
                 override fun onSuccess(result: List<NewsItemEntity>) {
@@ -60,6 +60,6 @@ class TopHeadNewsServiceImpl @Inject constructor(
             },
             category = category,
             pageSize = 20,
-            language = Language.EN
+            language = language
         )
 }

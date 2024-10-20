@@ -21,7 +21,7 @@ class NewsServiceImpl @Inject constructor(
     override fun observeNewsItemById(newsItemId: Long) =
         database.newsDao().observeNewsItemById(newsItemId = newsItemId)
 
-    override suspend fun fetchEverything() {
+    override suspend fun fetchEverything(language: Language) {
         newsApiDataSource.getEverything(
             newsCallback = object : NewsCallback {
                 override fun onSuccess(result: List<NewsItemEntity>) {
@@ -34,7 +34,7 @@ class NewsServiceImpl @Inject constructor(
                     TODO("Not yet implemented")
                 }
             }, pageSize = 20,
-            language = Language.EN
+            language = language
         )
     }
 }

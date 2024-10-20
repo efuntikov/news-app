@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.efuntikov.newsapp.component.feed.NewsListScreen
 import com.efuntikov.newsapp.component.feed.NewsItemDetails
+import com.efuntikov.newsapp.component.settings.SettingsScreen
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,6 +49,11 @@ private fun Content() {
                         if (itemId != null) {
                             NewsItemDetails(navController = navController, itemId = itemId.toLong())
                         }
+                    }
+                }
+                composable("settings") { backStackEntry ->
+                    Crossfade(targetState = "settings_screen", label = "settings_screen_crossfade") {
+                        SettingsScreen()
                     }
                 }
             }

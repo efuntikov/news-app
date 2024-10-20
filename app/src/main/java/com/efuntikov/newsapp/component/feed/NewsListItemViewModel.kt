@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.efuntikov.newsapp.component.BaseViewModel
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
-import com.efuntikov.newsapp.domain.service.news.NewsService
+import com.efuntikov.newsapp.usecase.NewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.cancellable
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsListItemViewModel @Inject constructor(
-    private val newsService: NewsService
+    private val newsUseCase: NewsUseCase
 ) : BaseViewModel() {
     private var newsItemId: Long = 0
 
@@ -23,7 +23,7 @@ class NewsListItemViewModel @Inject constructor(
         this.newsItemId = newsItemId
 
         viewModelScope.launch(Dispatchers.Default) {
-            newsService.observeNewsItemById(newsItemId = newsItemId).cancellable()
+            newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable()
                 .collect { newsItem ->
                     newsItemModel.value = newsItem
                 }
