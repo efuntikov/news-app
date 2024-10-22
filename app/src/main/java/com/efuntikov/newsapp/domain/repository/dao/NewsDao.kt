@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,10 +21,10 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE category = :category")
     fun observeNewsByCategory(category: String): NewsFeed
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(newsItem: NewsItemEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(newsItems: List<NewsItemEntity>)
 
     @Query("DELETE FROM news")

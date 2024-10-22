@@ -2,9 +2,10 @@ package com.efuntikov.newsapp.domain.repository.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "news")
+@Entity(tableName = "news", indices = [Index(value = ["title", "content"], unique = true)])
 data class NewsItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -22,28 +23,28 @@ data class NewsItemEntity(
     fun getKey() = id
     fun getType() = "news"
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as NewsItemEntity
-
-        if (title != other.title) return false
-        if (textContent != other.textContent) return false
-        if (author != other.author) return false
-        if (imageUrl != other.imageUrl) return false
-        if (category != other.category) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = title.hashCode()
-        result = 31 * result + textContent.hashCode()
-        result = 31 * result + (author?.hashCode() ?: 0)
-        result = 31 * result + (imageUrl?.hashCode() ?: 0)
-        result = 31 * result + (category?.hashCode() ?: 0)
-        return result
-    }
+//    override fun equals(other: Any?): Boolean {
+//        if (this === other) return true
+//        if (javaClass != other?.javaClass) return false
+//
+//        other as NewsItemEntity
+//
+//        if (title != other.title) return false
+//        if (textContent != other.textContent) return false
+//        if (author != other.author) return false
+//        if (imageUrl != other.imageUrl) return false
+//        if (category != other.category) return false
+//
+//        return true
+//    }
+//
+//    override fun hashCode(): Int {
+//        var result = title.hashCode()
+//        result = 31 * result + textContent.hashCode()
+//        result = 31 * result + (author?.hashCode() ?: 0)
+//        result = 31 * result + (imageUrl?.hashCode() ?: 0)
+//        result = 31 * result + (category?.hashCode() ?: 0)
+//        return result
+//    }
 
 }
