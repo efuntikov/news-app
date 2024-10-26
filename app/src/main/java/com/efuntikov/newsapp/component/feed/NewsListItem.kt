@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,9 +37,11 @@ fun NewsListItem(modifier: Modifier, newsItemId: Long) {
 
 @Composable
 private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntity?) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         Spacer(Modifier.width(12.dp))
         Box(
             modifier = modifier
@@ -67,7 +68,7 @@ private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntit
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            color = Color.Cyan,
+                            color = MaterialTheme.colorScheme.primary,
                             text = newsItem.title,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis

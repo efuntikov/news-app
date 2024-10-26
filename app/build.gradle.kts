@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -92,4 +93,10 @@ dependencies {
 
     // Security
     implementation(libs.androidx.security.crypto.ktx)
+
+    // Accompanist
+    implementation(libs.accompanist.pager)
+
+    // Google fonts
+    implementation(libs.androidx.ui.text.google.fonts) // Google Fonts support
 }

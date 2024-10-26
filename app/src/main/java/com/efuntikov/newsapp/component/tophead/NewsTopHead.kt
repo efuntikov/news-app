@@ -7,15 +7,20 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -36,18 +41,21 @@ import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun NewsTopHeadSection() {
-    Row(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .background(color = MaterialTheme.colorScheme.background)
         ) {
+            Spacer(modifier = Modifier.width(12.dp))
             CategoriesRow()
-            Spacer(modifier = Modifier.height(8.dp))
-            HorizontalFeed()
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalFeed()
     }
 }
 
@@ -93,7 +101,7 @@ fun Category(category: TopNewsCategory) {
     ) {
         AnimatedVisibility(visible = category == selectedCategory) {
             CategoryIndicator()
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
             text = category.name.lowercase(),
@@ -108,20 +116,31 @@ fun Category(category: TopNewsCategory) {
 fun HorizontalFeed() {
     val viewModel = getViewModel<NewsTopHeadViewModel>()
     val newsFeedByCategory by viewModel.newsListByCategory
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        itemsIndexed(
-            items = newsFeedByCategory,
-            key = { _, item -> item.getKey() },
-            contentType = { _, item -> item.getType() },
-            itemContent = { _, newsItem ->
-                TopHeadNewsFeedItem(newsItemId = newsItem.id)
-            }
-        )
+//    LazyRow(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .background(MaterialTheme.colorScheme.background),
+//        horizontalArrangement = Arrangement.spacedBy(16.dp)
+//    ) {
+//        itemsIndexed(
+//            items = newsFeedByCategory,
+//            key = { _, item -> item.getKey() },
+//            contentType = { _, item -> item.getType() },
+//            itemContent = { _, newsItem ->
+//                TopHeadNewsFeedItem(newsItemId = newsItem.id)
+//            }
+//        )
+//    }
+
+    val pagerState = rememberPagerState(pageCount = { newsFeedByCategory.size })
+    HorizontalPager(
+        state = pagerState,
+        contentPadding = PaddingValues(horizontal = 32.dp), // Padding for preview effect
+        pageSpacing = 8.dp, // Spacing between items
+        beyondViewportPageCount = 2,
+        key = { newsFeedByCategory[it].id },
+    ) { page ->
+        TopHeadNewsFeedItem(newsItemId = newsFeedByCategory[page].id)
     }
 }
 

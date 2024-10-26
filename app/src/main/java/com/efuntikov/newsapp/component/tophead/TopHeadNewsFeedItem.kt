@@ -2,6 +2,7 @@ package com.efuntikov.newsapp.component.tophead
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,8 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.efuntikov.newsapp.R
+import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationText
 import com.efuntikov.newsapp.component.feed.NewsListItemViewModel
+import com.efuntikov.newsapp.dpToPx
 import com.efuntikov.newsapp.getViewModel
+import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 val newsTopHeadItemShape = RoundedCornerShape(
     topStart = CornerSize(16.dp),
@@ -47,8 +51,8 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
     newsItemModel?.let { newsItem ->
         Column(
             modifier = Modifier
-                .width(350.dp)
-                .height(300.dp)
+                .width(LocalConfiguration.current.screenWidthDp.minus(dpToPx(16.dp)).dp)
+                .wrapContentHeight()
                 .background(color = MaterialTheme.colorScheme.surface, shape = newsTopHeadItemShape)
                 .clip(newsTopHeadItemShape)
         ) {
@@ -75,49 +79,78 @@ private fun BottomSection(newsItemId: Long) {
         modifier = Modifier
             .padding(12.dp)
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.error) //!!!
+            .wrapContentHeight()
+            .background(color = MaterialTheme.colorScheme.surface)
     ) {
-        newsItemModel?.let { newsItem ->
+        NewsTitleSection(title = newsItemModel?.title)
+        Spacer(modifier = Modifier.height(8.dp))
+        AuthorSection(author = newsItemModel?.author)
+    }
+}
+
+@Composable
+fun NewsTitleSection(title: String?) {
+    Box(
+        contentAlignment = Alignment.CenterStart,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+    ) {
+        title?.let { title ->
             Text(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceContainerHigh), //!!!
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
                 overflow = TextOverflow.Ellipsis,
-                text = newsItem.title
+                text = title
             )
-
-            newsItem.author?.let { author ->
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .background(Color.Green),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_avatar),
-                        modifier = Modifier.size(36.dp),
-                        contentDescription = "top head news item author icon"
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        modifier = Modifier
-                            .background(Color.Red)
-                            .align(Alignment.CenterVertically),
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodySmall,
-                        lineHeight = 10.sp,
-                        text = author
-                    )
-                }
-            }
+        } ?: run {
+            SlidingAnimationText(textPlaceholderWidth = 300.dp)
         }
     }
 }
 
 @Preview
 @Composable
-fun TopHeadNewsFeedItemPreview() {
-    TopHeadNewsFeedItem(newsItemId = 123)
+fun NewsTitleSectionPreview() {
+    NewsAppTheme {
+        NewsTitleSection(title = "Top head news title very long")
+    }
+}
+
+@Composable
+fun AuthorSection(author: String?) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(36.dp)
+            .background(MaterialTheme.colorScheme.surface),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_avatar),
+            modifier = Modifier.size(36.dp),
+            contentDescription = "top head news item author icon"
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        author?.let { author ->
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodySmall,
+                lineHeight = 10.sp,
+                text = author
+            )
+        } ?: run {
+            SlidingAnimationText(textPlaceholderWidth = 200.dp)
+        }
+    }
+}
+
+@Preview
+@Composable
+fun AuthorSectionPreview() {
+    NewsAppTheme {
+        AuthorSection(author = "John Doe")
+    }
 }
