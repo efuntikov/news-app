@@ -21,5 +21,7 @@ class DataModule {
     @Provides
     @Singleton
     fun provideDatabase(context: Context) =
-        Room.databaseBuilder(context, NewsDatabase::class.java, "news-database").build()
+        Room.databaseBuilder(context, NewsDatabase::class.java, "news-database")
+            .fallbackToDestructiveMigration() // TODO: Add migrations
+            .build()
 }

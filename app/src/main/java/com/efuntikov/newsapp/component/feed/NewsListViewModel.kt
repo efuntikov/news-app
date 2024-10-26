@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +27,7 @@ class NewsListViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.Default) {
             newsUseCase.observeEverything().cancellable().collect { everythingNewsList ->
+                Timber.i("Received news list(${everythingNewsList.size}): $everythingNewsList")
                 newsList.value = everythingNewsList
                 if (everythingNewsList.isEmpty()) {
                     newsUseCase.fetchEverything()

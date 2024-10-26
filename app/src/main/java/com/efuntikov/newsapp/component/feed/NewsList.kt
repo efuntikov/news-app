@@ -4,8 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
@@ -13,6 +16,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,22 +71,27 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
+                    .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
                     NewsTopHeadSection()
                 }
+                item {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Latest news", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
                 itemsIndexed(
                     items = newsList,
-                    key = { _, item -> item.getKey() },
-                    contentType = { _, item -> item.getType() },
+                    key = { _, item -> item.id },
+                    contentType = { _, _ -> "news item" },
                     itemContent = { _, newsItem ->
                         NewsListItem(modifier = Modifier.clickable {
                             navController.navigate("details/${newsItem.id}")
-                        }, newsItem.getKey())
+                        }, newsItem.id)
                     }
                 )
             }

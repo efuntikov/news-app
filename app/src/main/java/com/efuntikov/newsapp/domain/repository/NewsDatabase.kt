@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 @Database(
     entities = [
         NewsItemEntity::class
-    ], version = 2
+    ], version = 3
 )
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +14,7 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE id = :newsItemId")
     fun observeNewsItemById(newsItemId: Long): Flow<NewsItemEntity>
 
-    @Query("SELECT * FROM news WHERE category IS NULL")
+    @Query("SELECT * FROM news WHERE category IS NULL ORDER BY id ASC")
     fun observeNews(): NewsFeed
 
     @Query("SELECT * FROM news WHERE category = :category")
