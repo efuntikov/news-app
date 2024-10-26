@@ -48,7 +48,7 @@ private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntit
                 .weight(1f)
                 .wrapContentHeight()
                 .background(
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     shape = newsTopHeadItemShape
                 )
                 .clip(newsTopHeadItemShape)

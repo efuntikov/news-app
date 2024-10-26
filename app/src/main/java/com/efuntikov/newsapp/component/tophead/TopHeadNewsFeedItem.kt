@@ -36,11 +36,14 @@ import com.efuntikov.newsapp.dpToPx
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
-val newsTopHeadItemShape = RoundedCornerShape(
-    topStart = CornerSize(16.dp),
-    topEnd = CornerSize(16.dp),
-    bottomStart = CornerSize(16.dp), bottomEnd = CornerSize(16.dp)
-)
+val newsTopHeadItemShape = CornerSize(16.dp).let { cornerSize ->
+    RoundedCornerShape(
+        topStart = cornerSize,
+        topEnd = cornerSize,
+        bottomStart = cornerSize,
+        bottomEnd = cornerSize
+    )
+}
 
 @Composable
 fun TopHeadNewsFeedItem(newsItemId: Long) {
@@ -53,7 +56,7 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
             modifier = Modifier
                 .width(LocalConfiguration.current.screenWidthDp.minus(dpToPx(16.dp)).dp)
                 .wrapContentHeight()
-                .background(color = MaterialTheme.colorScheme.surface, shape = newsTopHeadItemShape)
+                .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = newsTopHeadItemShape)
                 .clip(newsTopHeadItemShape)
         ) {
             AsyncImage(
@@ -80,7 +83,7 @@ private fun BottomSection(newsItemId: Long) {
             .padding(12.dp)
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(color = MaterialTheme.colorScheme.surface)
+            .background(color = MaterialTheme.colorScheme.secondaryContainer)
     ) {
         NewsTitleSection(title = newsItemModel?.title)
         Spacer(modifier = Modifier.height(8.dp))
@@ -98,9 +101,8 @@ fun NewsTitleSection(title: String?) {
     ) {
         title?.let { title ->
             Text(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
                 maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 overflow = TextOverflow.Ellipsis,
                 text = title
             )
@@ -123,8 +125,7 @@ fun AuthorSection(author: String?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(36.dp)
-            .background(MaterialTheme.colorScheme.surface),
+            .height(36.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -137,7 +138,7 @@ fun AuthorSection(author: String?) {
             Text(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyLarge,
                 lineHeight = 10.sp,
                 text = author
             )

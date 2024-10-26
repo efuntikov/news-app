@@ -37,7 +37,7 @@ val provider = GoogleFont.Provider(
 
 val bodyFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Acme"),
+        googleFont = GoogleFont("Lato"),
         fontProvider = provider,
     )
 )
