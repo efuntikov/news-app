@@ -102,8 +102,94 @@ private fun SingleGradientTest() {
     }
 }
 
+private fun getTextFieldPath(textPlaceholderWidth: Float, curveShapeSize: Float) = Path().apply {
+    moveTo(curveShapeSize, 0f)
+    lineTo(curveShapeSize + textPlaceholderWidth, 0f)
+    arcTo(
+        rect = Rect(
+            topLeft = Offset(curveShapeSize + textPlaceholderWidth, 0f),
+            bottomRight = Offset(
+                curveShapeSize + textPlaceholderWidth + curveShapeSize,
+                curveShapeSize
+            )
+        ),
+        startAngleDegrees = 270f,
+        sweepAngleDegrees = 180f,
+        forceMoveTo = true
+    )
+    lineTo(curveShapeSize, curveShapeSize)
+    arcTo(
+        rect = Rect(
+            topLeft = Offset(0f, 0f),
+            bottomRight = Offset(curveShapeSize, curveShapeSize)
+        ),
+        startAngleDegrees = 90f,
+        sweepAngleDegrees = 180f,
+        forceMoveTo = false
+    )
+    close()
+}
+
+private fun getBoxPath(boxWidth: Float, boxHeight: Float) = Path().apply {
+    moveTo(0f, 0f)
+    lineTo(boxWidth, 0f)
+    lineTo(boxWidth, boxHeight)
+    lineTo(0f, boxHeight)
+    close()
+}
+
 @Composable
-fun SlidingAnimationText(textPlaceholderWidth: Dp) {
+fun SlidingAnimationText(textPlaceholderWidth: Dp, curveShapeSize: Dp = 16.dp) {
+    val baseSize = dpToPx(textPlaceholderWidth)
+    val arcSize = dpToPx(curveShapeSize)
+    val textFieldPath = remember {
+        getTextFieldPath(
+            textPlaceholderWidth = baseSize,
+            curveShapeSize = arcSize
+        )
+    }
+    SlidingAnimation(
+        shapePath = textFieldPath,
+        width = textPlaceholderWidth + curveShapeSize * 2,
+        height = curveShapeSize
+    )
+}
+
+@Preview
+@Composable
+private fun SlidingAnimationTextPreview() {
+    NewsAppTheme {
+        SlidingAnimationText(textPlaceholderWidth = 200.dp)
+    }
+}
+
+@Composable
+fun SlidingAnimationBox(width: Dp, height: Dp) {
+    val boxWidth = dpToPx(width)
+    val boxHeight = dpToPx(height)
+    val boxPath = remember {
+        getBoxPath(
+            boxWidth = boxWidth,
+            boxHeight = boxHeight
+        )
+    }
+    SlidingAnimation(
+        shapePath = boxPath,
+        width = width,
+        height = height
+    )
+}
+
+@Preview
+@Composable
+private fun SlidingAnimationBoxPreview() {
+    NewsAppTheme {
+        SlidingAnimationBox(width = 200.dp, height = 100.dp)
+    }
+}
+
+@Composable
+private fun SlidingAnimation(shapePath: Path, width: Dp, height: Dp) {
     Box {
         val limit = 1.0f
         val transition = rememberInfiniteTransition(label = "shimmer")
@@ -115,57 +201,27 @@ fun SlidingAnimationText(textPlaceholderWidth: Dp) {
                 repeatMode = RepeatMode.Restart
             ), label = "shimmer"
         )
-        val baseSize = dpToPx(textPlaceholderWidth)
-        val textFieldPath = remember {
-            Path().apply {
-                moveTo(baseSize * 0.25f, 0f)
-                lineTo(baseSize * 0.75f, 0f)
-                arcTo(
-                    rect = Rect(
-                        topLeft = Offset(baseSize * 0.5f, 0f),
-                        bottomRight = Offset(baseSize, baseSize * 0.5f)
-                    ),
-                    startAngleDegrees = 270f,
-                    sweepAngleDegrees = 180f,
-                    forceMoveTo = true
-                )
-                lineTo(baseSize * 0.25f, baseSize * 0.5f)
-                arcTo(
-                    rect = Rect(
-                        topLeft = Offset(0f, 0f),
-                        bottomRight = Offset(baseSize * 0.5f, baseSize * 0.5f)
-                    ),
-                    startAngleDegrees = 90f,
-                    sweepAngleDegrees = 180f,
-                    forceMoveTo = false
-                )
-                close()
-            }
-        }
         val color = MaterialTheme.colorScheme.secondary
         Box(
             modifier = Modifier
-                .width(textPlaceholderWidth)
-                .height(textPlaceholderWidth * 0.5f)
+                .width(width)
+                .height(height)
                 .graphicsLayer {
                     compositingStrategy = CompositingStrategy.Offscreen
                 }
                 .drawWithCache {
-                    val width = size.width
-                    val height = size.height
-
-                    val offset = width * progressAnimated
+                    val offset = size.width * progressAnimated
 
                     val gradientBrush = Brush.linearGradient(
                         colors = gradientColors,
-                        start = Offset(offset, height / 2f - 100),
-                        end = Offset(offset + width, height / 2f + 100)
+                        start = Offset(offset, size.height / 2f - 100),
+                        end = Offset(offset + size.width, size.height / 2f + 100)
                     )
 
                     onDrawBehind {
                         // Destination
                         drawPath(
-                            path = textFieldPath,
+                            path = shapePath,
                             color = color,
                             style = Fill
                         )
@@ -178,13 +234,5 @@ fun SlidingAnimationText(textPlaceholderWidth: Dp) {
                     }
                 }
         )
-    }
-}
-
-@Preview
-@Composable
-fun SlidingAnimationTextPreview() {
-    NewsAppTheme {
-        SlidingAnimationText(textPlaceholderWidth = 200.dp)
     }
 }

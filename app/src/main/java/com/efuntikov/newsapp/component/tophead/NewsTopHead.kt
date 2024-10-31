@@ -38,6 +38,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Composable
 fun NewsTopHeadSection() {
@@ -112,6 +114,7 @@ fun Category(category: TopNewsCategory) {
     }
 }
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun HorizontalFeed() {
     val viewModel = getViewModel<NewsTopHeadViewModel>()
@@ -138,7 +141,7 @@ fun HorizontalFeed() {
         contentPadding = PaddingValues(horizontal = 32.dp), // Padding for preview effect
         pageSpacing = 8.dp, // Spacing between items
         beyondViewportPageCount = 2,
-        key = { newsFeedByCategory[it].id },
+        key = { newsFeedByCategory[it].id.let { id -> if (id == -1L) Uuid.random().toHexString() else id} },
     ) { page ->
         TopHeadNewsFeedItem(newsItemId = newsFeedByCategory[page].id)
     }

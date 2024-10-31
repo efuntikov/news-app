@@ -18,6 +18,7 @@ class NewsListItemViewModel @Inject constructor(
     private var newsItemId: Long = 0
 
     val newsItemModel = mutableStateOf<NewsItemEntity?>(null)
+    val isLoading = mutableStateOf(true)
 
     fun setNewsItemId(newsItemId: Long) {
         this.newsItemId = newsItemId
@@ -26,14 +27,8 @@ class NewsListItemViewModel @Inject constructor(
             newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable()
                 .collect { newsItem ->
                     newsItemModel.value = newsItem
+                    isLoading.value = false
                 }
         }
-//        fetchData()
     }
-
-//    fun fetchData() {
-//        newsItemModel.imageUrl?.let { url ->
-//
-//        }
-//    }
 }

@@ -16,9 +16,21 @@ import javax.inject.Inject
 class NewsTopHeadViewModel @Inject constructor(
     private val newsUseCase: NewsUseCase
 ) : BaseViewModel() {
+
+    companion object {
+        private val fakeNewsItem = NewsItemEntity(
+            id = -1, author = "fake", title = "fake", textContent = "fake",
+            imageUrl = null,
+            category = null
+        )
+    }
+
+    private val loadingList =
+        listOf(fakeNewsItem, fakeNewsItem, fakeNewsItem, fakeNewsItem)
+
     val categoriesList = mutableStateOf<Set<TopNewsCategory>>(emptySet())
     val selectedCategory = mutableStateOf(TopNewsCategory.BUSINESS)
-    val newsListByCategory = mutableStateOf<List<NewsItemEntity>>(emptyList())
+    val newsListByCategory = mutableStateOf<List<NewsItemEntity>>(loadingList)
 
     private var observeNewsCategoryJob: Job? = null
 
@@ -35,7 +47,7 @@ class NewsTopHeadViewModel @Inject constructor(
     private fun observeNewsBySelectedCategory() = viewModelScope.launch(Dispatchers.Default) {
         newsUseCase.observeTopNewsByCategory(selectedCategory.value).cancellable()
             .collect { categoryNewsList ->
-                newsListByCategory.value = categoryNewsList
+                newsListByCategory.value = categoryNewsList.ifEmpty { loadingList }
                 if (categoryNewsList.isEmpty()) {
                     newsUseCase.fetchTopNews(selectedCategory.value)
                 } else {
