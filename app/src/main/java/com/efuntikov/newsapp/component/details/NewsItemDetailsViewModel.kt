@@ -1,4 +1,4 @@
-package com.efuntikov.newsapp.component.feed
+package com.efuntikov.newsapp.component.details
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -12,12 +12,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsListItemViewModel @Inject constructor(
+class NewsItemDetailsViewModel @Inject constructor(
     private val newsUseCase: NewsUseCase
-) : BaseViewModel() {
+): BaseViewModel() {
     private var newsItemId: Long? = null
 
     val newsItemModel = mutableStateOf<NewsItemEntity?>(null)
+    val imageUrl = mutableStateOf<String?>(null)
+    val title = mutableStateOf<String?>(null)
+    val content = mutableStateOf<String?>(null)
     val isLoading = mutableStateOf(true)
 
     fun setNewsItemId(newsItemId: Long) {
@@ -27,6 +30,9 @@ class NewsListItemViewModel @Inject constructor(
             newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable()
                 .collect { newsItem ->
                     newsItemModel.value = newsItem
+                    imageUrl.value = newsItem.imageUrl
+                    title.value = newsItem.title
+                    content.value = newsItem.textContent
                     isLoading.value = false
                 }
         }

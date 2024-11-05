@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.efuntikov.newsapp.component.feed.NewsListScreen
-import com.efuntikov.newsapp.component.feed.NewsItemDetails
+import com.efuntikov.newsapp.component.details.NewsItemDetails
 import com.efuntikov.newsapp.component.settings.SettingsScreen
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint

@@ -26,3 +26,13 @@ fun dpToPx(dp: Dp): Float {
     val density = LocalDensity.current
     return with(density) { dp.toPx() }
 }
+
+const val LOREM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+        "Donec dolor ex, pharetra et vestibulum sit amet, sagittis vel mauris. " +
+        "Duis malesuada elit in justo iaculis, at ultrices purus cursus. Mauris laoreet, nunc egestas aliquet volutpat, " +
+        "mi arcu dignissim enim, volutpat feugiat nisi nibh ac massa. In interdum purus nec felis cursus, a vulputate purus " +
+        "elementum. Nunc a urna at purus interdum aliquam sed a est. Phasellus dapibus leo at ligula vehicula mattis. Proin orci augue, " +
+        "interdum ut massa viverra, scelerisque lacinia nulla. Morbi at gravida purus. In quis augue sem. " +
+        "Nullam viverra, metus vitae pharetra ullamcorper, nisi sem dictum turpis, at elementum est nisl sit amet dolor. " +
+        "Ut leo elit, interdum a fringilla vel, condimentum a sapien. Cras ante orci, " +
+        "aliquet egestas augue vitae, placerat faucibus massa."
