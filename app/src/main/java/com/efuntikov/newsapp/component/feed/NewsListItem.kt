@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationBox
+import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationText
 import com.efuntikov.newsapp.component.tophead.newsTopHeadItemShape
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.efuntikov.newsapp.getViewModel
@@ -53,26 +55,38 @@ private fun NewsListItemContent(modifier: Modifier, newsItemModel: NewsItemEntit
                 )
                 .clip(newsTopHeadItemShape)
         ) {
-            newsItemModel?.let { newsItem ->
-                Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                newsItemModel?.imageUrl?.let { imageUrl ->
                     AsyncImage(
                         modifier = Modifier.size(120.dp),
                         contentScale = ContentScale.Crop,
-                        model = newsItem.imageUrl,
+                        model = imageUrl,
                         contentDescription = "news image"
                     )
-                    Spacer(
-                        modifier = Modifier
-                            .width(12.dp)
-                    )
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
+                } ?: run {
+                    SlidingAnimationBox(width = 120.dp, height = 120.dp)
+                }
+                Spacer(
+                    modifier = Modifier
+                        .width(12.dp)
+                )
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    newsItemModel?.title?.let { title ->
                         Text(
                             color = MaterialTheme.colorScheme.primary,
-                            text = newsItem.title,
+                            text = title,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
+                    } ?: run {
+                        Column {
+                            SlidingAnimationText(textPlaceholderWidth = 180.dp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            SlidingAnimationText(textPlaceholderWidth = 200.dp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            SlidingAnimationText(textPlaceholderWidth = 140.dp)
+                        }
                     }
                 }
             }

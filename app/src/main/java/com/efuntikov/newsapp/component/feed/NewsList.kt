@@ -3,6 +3,7 @@ package com.efuntikov.newsapp.component.feed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -65,10 +66,7 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
                 leadingIcon = R.drawable.ic_settings,
                 leadingIconClick = { navController.navigate("settings") })
         )
-        Column(
-            Modifier
-                .pullRefresh(state)
-        ) {
+        Box(Modifier.pullRefresh(state)) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -84,16 +82,18 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
                         Text(text = "Latest news", style = MaterialTheme.typography.titleMedium)
                     }
                 }
-                itemsIndexed(
-                    items = newsList,
-                    key = { _, item -> item.id },
-                    contentType = { _, _ -> "news item" },
-                    itemContent = { _, newsItem ->
-                        NewsListItem(modifier = Modifier.clickable {
-                            navController.navigate("details/${newsItem.id}")
-                        }, newsItem.id)
-                    }
-                )
+                if (newsList.isNotEmpty()) {
+                    itemsIndexed(
+                        items = newsList,
+                        key = { _, item -> item.id },
+                        contentType = { _, _ -> "news item" },
+                        itemContent = { _, newsItem ->
+                            NewsListItem(modifier = Modifier.clickable {
+                                navController.navigate("details/${newsItem.id}")
+                            }, newsItem.id)
+                        }
+                    )
+                }
             }
 
             PullRefreshIndicator(

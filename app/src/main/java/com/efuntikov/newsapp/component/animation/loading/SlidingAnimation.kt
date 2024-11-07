@@ -38,9 +38,9 @@ import com.efuntikov.newsapp.dpToPx
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 
 private val gradientColors = listOf(
-    Color(0xFFFFFFFF),
+    Color(0x5FFFFFFF),
     Color(0x1D646464),
-    Color(0xFFFFFFFF),
+    Color(0x5FFFFFFF),
 )
 
 @Preview
@@ -191,7 +191,7 @@ private fun SlidingAnimationBoxPreview() {
 @Composable
 private fun SlidingAnimation(shapePath: Path, width: Dp, height: Dp) {
     Box {
-        val limit = 1.0f
+        val limit = 1.2f
         val transition = rememberInfiniteTransition(label = "shimmer")
         val progressAnimated by transition.animateFloat(
             initialValue = -limit,
