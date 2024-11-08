@@ -31,7 +31,6 @@ class NewsListItemViewModel @Inject constructor(
         newsItemObserverJob?.cancel()
         this.newsItemId = newsItemId
         newsItemObserverJob = viewModelScope.launch(Dispatchers.Default) {
-            Timber.i("Start observing item: $newsItemId")
             newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable()
                 .collect { newsItem: NewsItemEntity? ->
                     Timber.i("Received item update: $newsItem")

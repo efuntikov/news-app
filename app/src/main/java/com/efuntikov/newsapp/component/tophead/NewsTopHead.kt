@@ -103,7 +103,7 @@ fun Category(category: TopNewsCategory) {
     ) {
         AnimatedVisibility(visible = category == selectedCategory) {
             CategoryIndicator()
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(8.dp))
         }
         Text(
             text = category.name.lowercase(),

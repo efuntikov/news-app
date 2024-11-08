@@ -8,6 +8,7 @@ import com.efuntikov.newsapp.domain.service.settings.SettingsService
 import com.efuntikov.newsapp.usecase.NewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,12 +23,18 @@ class NewsListViewModel @Inject constructor(
     val newsList = mutableStateOf<List<NewsItemEntity>>(emptyList())
     val newsFeedRefreshing = mutableStateOf(false)
 
+    private var loadNewsJob: Job? = null
+
     fun load() {
+        if (loadNewsJob != null) {
+            return
+        }
+
         newsFeedRefreshing.value = true
 
-        viewModelScope.launch(Dispatchers.Default) {
+        loadNewsJob = viewModelScope.launch(Dispatchers.Default) {
             newsUseCase.observeEverything().cancellable().collect { everythingNewsList ->
-                Timber.i("Received news list(${everythingNewsList.size}): $everythingNewsList")
+                Timber.i("Received news list(${everythingNewsList.size})")
                 newsList.value = everythingNewsList
                 if (everythingNewsList.isEmpty()) {
                     newsUseCase.fetchEverything()

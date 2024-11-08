@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,12 +28,16 @@ import com.efuntikov.newsapp.component.tophead.newsTopHeadItemShape
 import com.efuntikov.newsapp.domain.repository.entity.NewsItemEntity
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
+import timber.log.Timber
 
 @Composable
 fun NewsListItem(modifier: Modifier, newsItemId: Long) {
     val viewModel: NewsListItemViewModel = getViewModel(key = newsItemId.toString())
-    viewModel.setNewsItemId(newsItemId)
     val newsItemModel by viewModel.newsItemModel
+
+    LaunchedEffect(key1 = "initial") {
+        viewModel.setNewsItemId(newsItemId)
+    }
 
     NewsListItemContent(modifier, newsItemModel)
 }

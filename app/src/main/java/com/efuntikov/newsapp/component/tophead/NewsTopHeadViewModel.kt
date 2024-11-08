@@ -30,7 +30,7 @@ class NewsTopHeadViewModel @Inject constructor(
 
     val categoriesList = mutableStateOf<Set<TopNewsCategory>>(emptySet())
     val selectedCategory = mutableStateOf(TopNewsCategory.BUSINESS)
-    val newsListByCategory = mutableStateOf<List<NewsItemEntity>>(loadingList)
+    val newsListByCategory = mutableStateOf<List<NewsItemEntity>>(/*loadingList*/emptyList())
 
     private var observeNewsCategoryJob: Job? = null
 
