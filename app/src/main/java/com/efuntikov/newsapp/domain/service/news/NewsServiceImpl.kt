@@ -21,12 +21,17 @@ class NewsServiceImpl @Inject constructor(
     override fun observeNewsItemById(newsItemId: Long) =
         database.newsDao().observeNewsItemById(newsItemId = newsItemId)
 
-    override suspend fun fetchEverything(language: Language) {
+    override suspend fun fetchEverything(language: Language, force: Boolean) {
         newsApiDataSource.getEverything(
             newsCallback = object : NewsCallback {
                 override fun onSuccess(result: List<NewsItemEntity>) {
                     coroutineScope.launch(Dispatchers.IO) {
-                        database.newsDao().insertAll(result)
+                        database.newsDao().let { newsDao ->
+                            if (force) {
+                                newsDao.deleteAll()
+                            }
+                            newsDao.insertAll(result)
+                        }
                     }
                 }
 

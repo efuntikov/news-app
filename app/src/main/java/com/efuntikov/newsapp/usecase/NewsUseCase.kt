@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsUseCase {
     fun observeEverything(): NewsFeed
-    suspend fun fetchEverything()
+    suspend fun fetchEverything(force: Boolean = false)
     fun fetchTopNews()
     fun fetchTopNews(category: TopNewsCategory)
     fun observeTopNewsByCategory(category: TopNewsCategory): NewsFeed

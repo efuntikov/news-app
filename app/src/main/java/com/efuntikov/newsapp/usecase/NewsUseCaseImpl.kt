@@ -22,9 +22,9 @@ class NewsUseCaseImpl @Inject constructor(
         return newsService.observeNewsItemById(newsItemId = newsItemId)
     }
 
-    override suspend fun fetchEverything() {
+    override suspend fun fetchEverything(force: Boolean) {
         settingsService.getLanguage().let { lang ->
-            newsService.fetchEverything(language = lang)
+            newsService.fetchEverything(language = lang, force = force)
         }
     }
 

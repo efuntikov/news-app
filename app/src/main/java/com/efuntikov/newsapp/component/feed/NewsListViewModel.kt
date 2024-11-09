@@ -12,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,13 +45,13 @@ class NewsListViewModel @Inject constructor(
             }
 
             settingsService.observeLanguage().cancellable().collect {
-                fetchNews()
+                fetchNews(force = true)
             }
         }
     }
 
-    suspend fun fetchNews() {
+    suspend fun fetchNews(force: Boolean = false) {
         newsFeedRefreshing.value = true
-        newsUseCase.fetchEverything()
+        newsUseCase.fetchEverything(force)
     }
 }

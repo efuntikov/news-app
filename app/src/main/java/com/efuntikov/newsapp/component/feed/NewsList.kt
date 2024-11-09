@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +49,7 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
     val refreshing by newsListViewModel.newsFeedRefreshing
 
     fun refresh() = refreshScope.launch {
-        newsListViewModel.fetchNews()
+        newsListViewModel.fetchNews(force = true)
     }
 
     val state = rememberPullRefreshState(refreshing, ::refresh)
@@ -68,39 +69,38 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
                 leadingIcon = R.drawable.ic_settings,
                 leadingIconClick = { navController.navigate("settings") })
         )
-        Box(Modifier.pullRefresh(state)) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                item {
-                    NewsTopHeadSection()
-                }
-                item {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = "Latest news", style = MaterialTheme.typography.titleMedium)
-                    }
-                }
-                if (newsList.isNotEmpty()) {
-                    items(
-                        items = newsList,
-                        key = { item -> item.id },
-                        itemContent = { newsItem ->
-                            NewsListItem(modifier = Modifier.clickable {
-                                navController.navigate("details/${newsItem.id}")
-                            }, newsItem.id)
-                        }
-                    )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(state)
+                .background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                NewsTopHeadSection()
+            }
+            item {
+                PullRefreshIndicator(refreshing, state)
+            }
+            item {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Latest news", style = MaterialTheme.typography.titleMedium)
                 }
             }
-
-            PullRefreshIndicator(
-                refreshing,
-                state, /*Modifier.align(alignment = androidx.compose.ui.Alignment.Horizontal)*/
-            )
+            if (newsList.isNotEmpty()) {
+                items(
+                    items = newsList,
+                    key = { item -> item.id },
+                    itemContent = { newsItem ->
+                        NewsListItem(modifier = Modifier.clickable {
+                            navController.navigate("details/${newsItem.id}")
+                        }, newsItem.id)
+                    }
+                )
+            }
         }
     }
 }

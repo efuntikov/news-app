@@ -13,5 +13,5 @@ interface NewsCallback {
 interface NewsService {
     fun observeEverything(): NewsFeed
     fun observeNewsItemById(newsItemId: Long): Flow<NewsItemEntity>
-    suspend fun fetchEverything(language: Language)
+    suspend fun fetchEverything(language: Language, force: Boolean)
 }
