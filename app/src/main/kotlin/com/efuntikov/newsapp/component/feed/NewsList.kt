@@ -44,8 +44,10 @@ import com.efuntikov.newsapp.component.topbar.TopBarState
 import com.efuntikov.newsapp.component.tophead.NewsTopHeadSection
 import com.efuntikov.newsapp.getViewModel
 import kotlinx.coroutines.launch
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalUuidApi::class)
 @Composable
 fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) {
     val newsListViewModel: NewsListViewModel = getViewModel()
@@ -119,7 +121,9 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
                     if (newsList.isNotEmpty()) {
                         items(
                             items = newsList,
-                            key = { item -> item.id },
+                            key = { it.id.let { id ->
+                                if (id == -1L) Uuid.random().toHexString() else id
+                            } },
                             itemContent = { newsItem ->
                                 NewsListItem(modifier = Modifier.clickable {
                                     navController.navigate("details/${newsItem.id}")

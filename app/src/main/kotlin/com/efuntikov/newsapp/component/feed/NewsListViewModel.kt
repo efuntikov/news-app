@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -22,7 +23,18 @@ class NewsListViewModel @Inject constructor(
     private val settingsService: SettingsService
 ) : BaseViewModel() {
 
-    val newsList = mutableStateOf<List<NewsItemEntity>>(emptyList())
+    companion object {
+        private val emptyNewsItem = NewsItemEntity(
+            id = -1, author = "", title = "", textContent = "",
+            imageUrl = null,
+            category = null
+        )
+    }
+
+    private val loadingList =
+        listOf(emptyNewsItem, emptyNewsItem, emptyNewsItem, emptyNewsItem, emptyNewsItem, emptyNewsItem)
+
+    val newsList = mutableStateOf<List<NewsItemEntity>>(/*emptyList()*/loadingList)
     val newsFeedRefreshing = mutableStateOf(false)
 
     private var loadNewsJob: Job? = null
@@ -34,9 +46,10 @@ class NewsListViewModel @Inject constructor(
 
         newsFeedRefreshing.value = true
 
-        loadNewsJob = viewModelScope.launch(Dispatchers.Default) {
-            newsUseCase.observeEverything().cancellable().collect { everythingNewsList ->
+        loadNewsJob = viewModelScope.launch(Dispatchers.IO) {
+            newsUseCase.observeEverything().cancellable().flowOn(Dispatchers.IO).collect { everythingNewsList ->
                 Timber.i("Received news list(${everythingNewsList.size})")
+                sleep(2000)
                 newsList.value = everythingNewsList
                 if (everythingNewsList.isEmpty()) {
                     newsUseCase.fetchEverything()

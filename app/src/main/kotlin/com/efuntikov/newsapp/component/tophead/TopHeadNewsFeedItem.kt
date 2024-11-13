@@ -57,7 +57,6 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
     val newsItemModel by viewModel.newsItemModel
     val isLoading by viewModel.isLoading
     val housingWidth = LocalConfiguration.current.screenWidthDp.minus(dpToPx(16.dp)).dp
-    newsItemModel?.let { newsItem ->
         Column(
             modifier = Modifier
                 .width(housingWidth)
@@ -76,13 +75,12 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
                         .fillMaxWidth()
                         .height(200.dp),
                     contentScale = ContentScale.Crop,
-                    model = newsItem.imageUrl,
+                    model = newsItemModel?.imageUrl,
                     contentDescription = "top head news item image"
                 )
             }
             BottomSection(newsItemId = newsItemId)
         }
-    }
 }
 
 @Composable

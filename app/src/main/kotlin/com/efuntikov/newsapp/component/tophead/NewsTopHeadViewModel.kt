@@ -9,7 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,9 +47,10 @@ class NewsTopHeadViewModel @Inject constructor(
         observeNewsCategoryJob = observeNewsBySelectedCategory()
     }
 
-    private fun observeNewsBySelectedCategory() = viewModelScope.launch(Dispatchers.Default) {
-        newsUseCase.observeTopNewsByCategory(selectedCategory.value).cancellable()
+    private fun observeNewsBySelectedCategory() = viewModelScope.launch(Dispatchers.IO) {
+        newsUseCase.observeTopNewsByCategory(selectedCategory.value).cancellable().flowOn(Dispatchers.IO)
             .collect { categoryNewsList ->
+                sleep(2000)
                 newsListByCategory.value = categoryNewsList.ifEmpty { loadingList }
                 if (categoryNewsList.isEmpty()) {
                     viewModelScope.launch(Dispatchers.IO) {

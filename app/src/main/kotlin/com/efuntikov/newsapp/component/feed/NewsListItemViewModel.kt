@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class NewsListItemViewModel @Inject constructor(
     private var newsItemObserverJob: Job? = null
 
     val newsItemModel = mutableStateOf<NewsItemEntity?>(null)
+    val imageUrl = mutableStateOf<String?>(null)
     val isLoading = mutableStateOf(true)
 
     fun setNewsItemId(newsItemId: Long) {
@@ -30,8 +32,8 @@ class NewsListItemViewModel @Inject constructor(
 
         newsItemObserverJob?.cancel()
         this.newsItemId = newsItemId
-        newsItemObserverJob = viewModelScope.launch(Dispatchers.Default) {
-            newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable()
+        newsItemObserverJob = viewModelScope.launch(Dispatchers.IO) {
+            newsUseCase.observeNewsItem(newsItemId = newsItemId).cancellable().flowOn(Dispatchers.IO)
                 .collect { newsItem: NewsItemEntity? ->
 //                    Timber.i("Received item update: $newsItem")
                     newsItemModel.value = newsItem

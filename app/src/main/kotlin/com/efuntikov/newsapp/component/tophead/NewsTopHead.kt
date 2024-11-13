@@ -119,8 +119,7 @@ fun HorizontalFeed() {
     val pagerState = rememberPagerState(pageCount = { newsFeedByCategory.size })
     HorizontalPager(
         state = pagerState,
-        contentPadding = PaddingValues(horizontal = 32.dp),
-        pageSpacing = 8.dp,
+        contentPadding = PaddingValues(horizontal = 8.dp),
         userScrollEnabled = isHorizontalScrollingEnabled,
         beyondViewportPageCount = 2,
         key = {
