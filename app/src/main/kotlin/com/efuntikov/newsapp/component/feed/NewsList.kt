@@ -113,7 +113,7 @@ fun NewsListScreen(modifier: Modifier = Modifier, navController: NavController) 
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
-                        NewsTopHeadSection()
+                        NewsTopHeadSection(navController = navController)
                     }
                     item {
                         LatestNewsLabel()

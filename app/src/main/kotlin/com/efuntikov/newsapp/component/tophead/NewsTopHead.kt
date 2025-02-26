@@ -31,13 +31,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.efuntikov.newsapp.getViewModel
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Composable
-fun NewsTopHeadSection() {
+fun NewsTopHeadSection(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +53,7 @@ fun NewsTopHeadSection() {
             CategoriesRow()
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HorizontalFeed()
+        HorizontalFeed(navController = navController)
     }
 }
 
@@ -111,7 +112,7 @@ fun Category(category: TopNewsCategory) {
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
-fun HorizontalFeed() {
+fun HorizontalFeed(navController: NavController) {
     val viewModel = getViewModel<NewsTopHeadViewModel>()
     val newsFeedByCategory by viewModel.newsListByCategory
     val isHorizontalScrollingEnabled by viewModel.isHorizontalScrollingEnabled
@@ -128,15 +129,9 @@ fun HorizontalFeed() {
             }
         },
     ) { page ->
-        TopHeadNewsFeedItem(newsItemId = newsFeedByCategory[page].id)
-    }
-}
-
-@Preview
-@Composable
-fun NewsTopHeadSectionPreview() {
-    NewsAppTheme {
-        NewsTopHeadSection()
+        TopHeadNewsFeedItem(modifier = Modifier.clickable {
+            navController.navigate("details/${newsFeedByCategory[page].id}")
+        }, newsItemId = newsFeedByCategory[page].id)
     }
 }
 

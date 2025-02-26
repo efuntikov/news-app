@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.efuntikov.newsapp.R
 import com.efuntikov.newsapp.dpToPx
 import com.efuntikov.newsapp.ui.theme.NewsAppTheme
+import kotlin.math.round
 
 private val gradientColors = listOf(
     Color(0x5FFFFFFF),
@@ -179,11 +180,35 @@ fun SlidingAnimationBox(width: Dp, height: Dp) {
     )
 }
 
+@Composable
+fun SlidingAnimationCircle(size: Dp) {
+    val diameter = dpToPx(size)
+    val circlePath = remember {
+        Path().apply {
+            addOval(oval = Rect(offset = Offset.Zero, size = Size(diameter, diameter)))
+            close()
+        }
+    }
+    SlidingAnimation(
+        shapePath = circlePath,
+        width = size,
+        height = size
+    )
+}
+
 @Preview
 @Composable
 private fun SlidingAnimationBoxPreview() {
     NewsAppTheme {
         SlidingAnimationBox(width = 200.dp, height = 100.dp)
+    }
+}
+
+@Preview
+@Composable
+private fun SlidingAnimationCirclePreview() {
+    NewsAppTheme {
+        SlidingAnimationCircle(size = 64.dp)
     }
 }
 

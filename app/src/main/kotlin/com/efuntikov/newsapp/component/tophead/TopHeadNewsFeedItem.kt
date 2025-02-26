@@ -21,6 +21,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -28,10 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.efuntikov.newsapp.R
 import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationBox
+import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationCircle
 import com.efuntikov.newsapp.component.animation.loading.SlidingAnimationText
 import com.efuntikov.newsapp.component.feed.NewsListItemViewModel
 import com.efuntikov.newsapp.dpToPx
@@ -48,7 +50,7 @@ val newsTopHeadItemShape = CornerSize(16.dp).let { cornerSize ->
 }
 
 @Composable
-fun TopHeadNewsFeedItem(newsItemId: Long) {
+fun TopHeadNewsFeedItem(modifier: Modifier = Modifier, newsItemId: Long) {
     val viewModel: NewsListItemViewModel = getViewModel(key = newsItemId.toString())
     LaunchedEffect(key1 = "initial") {
         viewModel.setNewsItemId(newsItemId)
@@ -57,30 +59,31 @@ fun TopHeadNewsFeedItem(newsItemId: Long) {
     val newsItemModel by viewModel.newsItemModel
     val isLoading by viewModel.isLoading
     val housingWidth = LocalConfiguration.current.screenWidthDp.minus(dpToPx(16.dp)).dp
-        Column(
-            modifier = Modifier
-                .width(housingWidth)
-                .wrapContentHeight()
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = newsTopHeadItemShape
-                )
-                .clip(newsTopHeadItemShape)
-        ) {
-            if (isLoading) {
-                SlidingAnimationBox(width = housingWidth, height = 200.dp)
-            } else {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentScale = ContentScale.Crop,
-                    model = newsItemModel?.imageUrl,
-                    contentDescription = "top head news item image"
-                )
-            }
-            BottomSection(newsItemId = newsItemId)
+    Column(
+        modifier = modifier
+            .width(housingWidth)
+            .wrapContentHeight()
+            .background(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = newsTopHeadItemShape
+            )
+            .clip(newsTopHeadItemShape)
+    ) {
+        if (isLoading) {
+            SlidingAnimationBox(width = housingWidth, height = 200.dp)
+        } else {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .blur(100.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                    .height(200.dp),
+                contentScale = ContentScale.Crop,
+                model = newsItemModel?.imageUrl,
+                contentDescription = "top head news item image"
+            )
         }
+        BottomSection(newsItemId = newsItemId)
+    }
 }
 
 @Composable
@@ -143,7 +146,7 @@ fun AuthorSection(author: String?, isLoading: Boolean) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (isLoading) {
-            SlidingAnimationBox(width = 36.dp, height = 36.dp)
+            SlidingAnimationCircle(size = 36.dp)
         } else {
             Image(
                 painter = painterResource(R.drawable.ic_avatar),
@@ -160,7 +163,6 @@ fun AuthorSection(author: String?, isLoading: Boolean) {
                     modifier = Modifier.align(Alignment.CenterVertically),
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyLarge,
-                    lineHeight = 10.sp,
                     text = author
                 )
             }
